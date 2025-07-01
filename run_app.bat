@@ -1,5 +1,5 @@
 :: filename: run_app.bat
-:: Description: Launch the Nethira main application (main.py)
+:: Description: Launch the Nethira CLI application
 :: Usage: Double-click or run from Command Prompt
 
 @echo off

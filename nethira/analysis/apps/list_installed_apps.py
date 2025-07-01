@@ -2,11 +2,11 @@
 # Description: Categorize Android apps into system, android, google, manufacturer, facebook, vendor, user, and uncategorized
 
 import subprocess
-import os
 from typing import List, Dict
-from analysis import app_category_keywords
+from nethira.analysis.apps import app_category_keywords
+from nethira.utils import get_adb_path
 
-ADB_PATH = os.path.join("platform_tools", "adb.exe")
+ADB_PATH = get_adb_path()
 
 def _run_adb_command(serial: str, args: List[str]) -> List[str]:
     """Run adb command and return cleaned list of package names."""

@@ -1,10 +1,10 @@
 # analysis/device_info_fetcher.py
 
 import subprocess
-import os
-from models.device_info import DeviceInfo
+from nethira.models.device_info import DeviceInfo
+from nethira.utils import get_adb_path
 
-ADB_PATH = os.path.join("platform_tools", "adb.exe")
+ADB_PATH = get_adb_path()
 
 
 def get_connected_devices() -> list[str]:

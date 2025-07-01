@@ -36,13 +36,13 @@ venv/
 .ipynb_checkpoints/
 
 # Test artifacts
+nethira/analysis/__pycache__/
+nethira/models/__pycache__/
+nethira/utils/__pycache__/
 /testing/__pycache__/
-analysis/__pycache__/
-models/__pycache__/
-utils/__pycache__/
 
 # Clean-up scripts (if generating temp output)
-scripts/clean_up_project_output.txt
+tools/clean_up_project_output.txt
 
 # Misc
 *.swp
