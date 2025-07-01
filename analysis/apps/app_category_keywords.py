@@ -29,6 +29,24 @@ FACEBOOK_PACKAGES = [
     "com.facebook.appmanager"
 ]
 
+TWITTER_PACKAGES = [
+    "com.twitter.android",
+]
+
+INSTAGRAM_PACKAGES = [
+    "com.instagram.android",
+]
+
+PARLER_PACKAGES = [
+    "com.parler.app",
+    "com.parler.parler",
+]
+
+REDDIT_PACKAGES = [
+    "com.reddit.frontpage",
+    "com.reddit",
+]
+
 TIKTOK_PACKAGES = [
     "com.zhiliaoapp",         # TikTok main identifier
     "com.ss.android.ugc.trill",  # TikTok regional variant

@@ -1,13 +1,12 @@
 # filename: nethira/main.py
 # Description: Command line interface for the Nethira Android Recon Toolkit
 
-import os
 import sys
 
-from nethira.analysis.device import device_enumeration
-from nethira.analysis.apps import list_installed_apps
-from nethira.models.device_info import DeviceInfo
-from nethira.utils import display_utils
+from analysis.device import device_enumeration, device_reporter
+from analysis.apps import list_installed_apps, social_media_detector
+from models.device_info import DeviceInfo
+from utils import display_utils
 
 
 def show_main_menu() -> None:
@@ -17,6 +16,8 @@ def show_main_menu() -> None:
     print("============================================================")
     print(" [1] Show connected devices")
     print(" [2] List installed apps by category")
+    print(" [3] Detect social media apps")
+    print(" [4] Generate device report")
     print(" [0] Exit")
     print("============================================================\n")
 
@@ -71,6 +72,42 @@ def handle_app_listing(devices: list[DeviceInfo]):
         print()
 
 
+def handle_social_media_scan(devices: list[DeviceInfo]) -> None:
+    """Scan for well-known social media apps on a selected device."""
+    selected_device = prompt_device_selection(devices)
+    if not selected_device:
+        return
+
+    results = social_media_detector.detect_social_media_apps(selected_device.serial)
+    print("============================================================")
+    print(
+        f" SOCIAL MEDIA APPS ON: {selected_device.model} ({selected_device.serial})"
+    )
+    print("============================================================\n")
+
+    if not results:
+        print("No major social media apps found.\n")
+        return
+
+    for name, packages in results.items():
+        print(f"=== {name.upper()} ({len(packages)}) ===")
+        for pkg in packages:
+            print(f" - {pkg}")
+        print()
+
+
+def handle_device_report(devices: list[DeviceInfo]) -> None:
+    """Generate and save a detailed report for a chosen device."""
+    selected_device = prompt_device_selection(devices)
+    if not selected_device:
+        return
+
+    path = device_reporter.save_report(
+        selected_device.serial, selected_device.manufacturer
+    )
+    print(f"\nReport saved to {path}\n")
+
+
 def main():
     display_utils.print_banner()
 
@@ -85,6 +122,16 @@ def main():
             devices = device_enumeration.enumerate_and_display_devices()
             if devices:
                 handle_app_listing(devices)
+
+        elif choice == "3":
+            devices = device_enumeration.enumerate_and_display_devices()
+            if devices:
+                handle_social_media_scan(devices)
+
+        elif choice == "4":
+            devices = device_enumeration.enumerate_and_display_devices()
+            if devices:
+                handle_device_report(devices)
 
         elif choice == "0":
             print("\nExiting Nethira.\n")

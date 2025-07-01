@@ -1,39 +1,14 @@
 # analysis/device_info_fetcher.py
 
-import subprocess
-from nethira.models.device_info import DeviceInfo
-from nethira.utils import get_adb_path
-
-ADB_PATH = get_adb_path()
+from models.device_info import DeviceInfo
+from utils import adb_shell, list_connected_devices
 
 
 def get_connected_devices() -> list[str]:
     """Returns a list of serial numbers for currently connected ADB devices."""
-    try:
-        result = subprocess.run(
-            [ADB_PATH, "devices"],
-            capture_output=True, text=True, check=True
-        )
-        lines = result.stdout.strip().splitlines()[1:]  # Skip the header
-        return [
-            line.split()[0]
-            for line in lines
-            if "device" in line and not line.startswith("*")
-        ]
-    except subprocess.CalledProcessError:
-        return []
+    return list_connected_devices()
 
 
-def adb_shell(serial: str, cmd: str) -> str:
-    """Runs an ADB shell command for a specific device serial."""
-    try:
-        result = subprocess.run(
-            [ADB_PATH, "-s", serial, "shell", cmd],
-            capture_output=True, text=True, check=True
-        )
-        return result.stdout.strip()
-    except subprocess.CalledProcessError:
-        return "N/A"
 
 
 def get_device_info(serial: str) -> DeviceInfo:
@@ -45,6 +20,11 @@ def get_device_info(serial: str) -> DeviceInfo:
         android_version=adb_shell(serial, "getprop ro.build.version.release"),
         sdk_version=adb_shell(serial, "getprop ro.build.version.sdk"),
         device_name=adb_shell(serial, "getprop ro.product.device"),
+        build_number=adb_shell(serial, "getprop ro.build.display.id"),
+        security_patch=adb_shell(serial, "getprop ro.build.version.security_patch"),
+        fingerprint=adb_shell(serial, "getprop ro.build.fingerprint"),
+        bootloader=adb_shell(serial, "getprop ro.bootloader"),
+        cpu_abi=adb_shell(serial, "getprop ro.product.cpu.abi"),
     )
 
 
@@ -52,4 +32,3 @@ def fetch_all_device_info() -> list[DeviceInfo]:
     """Returns a list of DeviceInfo objects for all connected devices."""
     serials = get_connected_devices()
     return [get_device_info(serial) for serial in serials]
-
