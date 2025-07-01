@@ -1,0 +1,49 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Platform tools binaries (optional — keep if versioned)
+# Uncomment the next line if you don't want to track platform binaries
+# /platform_tools/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# Windows batch scripts logs/output (optional)
+*.log
+
+# Output and temporary directories
+/output/
+*.tmp
+*.bak
+
+# Python virtual environments
+venv/
+.env/
+.venv/
+
+# IDE/editor config files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Jupyter Notebooks (if added later)
+.ipynb_checkpoints/
+
+# Test artifacts
+/testing/__pycache__/
+analysis/__pycache__/
+models/__pycache__/
+utils/__pycache__/
+
+# Clean-up scripts (if generating temp output)
+scripts/clean_up_project_output.txt
+
+# Misc
+*.swp
+*.swo
