@@ -5,15 +5,19 @@
 ## Features
 
 - Detects and lists all Android devices accessible via ADB
-- Displays detailed metadata such as serial, model, manufacturer and Android version
+- Displays detailed metadata such as serial, model, manufacturer, build number, security patch level and more
 - Categorises installed apps using predefined keyword lists
+- Detects presence of major social media apps (Facebook, Twitter, Instagram, Parler, TikTok)
+- Generates JSON reports containing device info and categorized apps
 - Works on Windows, macOS and Linux (uses the bundled ADB if available)
 
 ## Project Layout
 
 ```
 main.py          # entry script
-nethira/         # Python package with CLI and analysis modules
+analysis/        # device and app analysis modules
+models/          # dataclass definitions
+utils/           # helper utilities
 platform_tools/  # optional ADB binaries for Windows users
 run_app.bat      # helper script for launching on Windows
 ```

@@ -1,14 +1,21 @@
 # filename: utils/display_utils.py
 
 import os
+import subprocess
 from typing import List
-from nethira.models.device_info import DeviceInfo
 
-def clear_screen():
-    """
-    Clears the terminal screen based on the operating system.
-    """
-    os.system("cls" if os.name == "nt" else "clear")
+from models.device_info import DeviceInfo
+
+
+def clear_screen() -> None:
+    """Clear the terminal without invoking the shell."""
+    try:
+        if os.name == "nt":
+            subprocess.run(["cmd", "/c", "cls"], check=False)
+        else:
+            subprocess.run(["clear"], check=False)
+    except Exception:
+        print("\033c", end="")
 
 
 def print_banner():
@@ -34,12 +41,23 @@ def print_device_table(devices_info: List[DeviceInfo]):
         print("[*] No devices to display.\n")
         return
 
-    header_format = "{:<3} {:<16} {:<25} {:<15} {:<13} {:<9} {:<15}"
+    header_format = (
+        "{:<3} {:<16} {:<20} {:<12} {:<13} {:<9} {:<12} {:<10}"
+    )
     row_format = header_format
 
-    print(header_format.format(
-        "No", "Serial", "Model", "Manufacturer", "Android Ver", "SDK", "Device Name"
-    ))
+    print(
+        header_format.format(
+            "No",
+            "Serial",
+            "Model",
+            "Manufacturer",
+            "Android Ver",
+            "SDK",
+            "Build No",
+            "Security",
+        )
+    )
     print("-" * 100)
 
     for idx, device in enumerate(devices_info, start=1):
@@ -50,7 +68,18 @@ def print_device_table(devices_info: List[DeviceInfo]):
             device.manufacturer[:14],
             device.android_version,
             device.sdk_version,
-            device.device_name[:14]
+            device.build_number[:11],
+            device.security_patch[:9]
         ))
 
+    print()
+
+
+def print_device_details(device: DeviceInfo) -> None:
+    """Display all available fields for a single device."""
+    print("=" * 60)
+    print(f"  DETAILS FOR DEVICE: {device.model} ({device.serial})")
+    print("=" * 60)
+    print(device)
+    print("=" * 60)
     print()

@@ -1,29 +1,12 @@
 # filename: analysis/list_installed_apps.py
-# Description: Categorize Android apps into system, android, google, manufacturer, facebook, vendor, user, and uncategorized
+# Description: Categorize Android apps into various groups including
+# manufacturer, android core, google, major social media platforms,
+# vendor related apps, user installed, system, and uncategorized
 
-import subprocess
-from typing import List, Dict
-from nethira.analysis.apps import app_category_keywords
-from nethira.utils import get_adb_path
+from typing import Dict, List
 
-ADB_PATH = get_adb_path()
-
-def _run_adb_command(serial: str, args: List[str]) -> List[str]:
-    """Run adb command and return cleaned list of package names."""
-    try:
-        result = subprocess.run(
-            [ADB_PATH, "-s", serial] + args,
-            capture_output=True, text=True, check=True
-        )
-        return [
-            line.replace("package:", "").strip()
-            for line in result.stdout.strip().splitlines()
-            if line.strip()
-        ]
-    except subprocess.CalledProcessError as err:
-        print(f"[!] ADB command failed: {' '.join(args)}")
-        print(f"    Error: {err}")
-        return []
+from analysis.apps import app_category_keywords
+from utils import list_packages
 
 def _matches_any(pkg: str, keywords: List[str]) -> bool:
     """Return True if the package name starts with any of the given keywords."""
@@ -33,20 +16,25 @@ def _matches_any(pkg: str, keywords: List[str]) -> bool:
 def categorize_installed_apps(serial: str, manufacturer: str) -> Dict[str, List[str]]:
     """
     Categorize installed Android apps into known groups based on package prefixes.
-    Priority order: manufacturer -> android -> google -> facebook -> vendor -> user -> system -> uncategorized
+    Priority order: manufacturer -> android -> google -> facebook -> tiktok -> twitter -> instagram -> parler -> reddit -> vendor -> user -> system -> uncategorized
     """
     print("\n[*] Scanning installed apps on device:", serial)
     print("[*] Please wait...\n")
 
-    all_apps = set(_run_adb_command(serial, ["shell", "pm", "list", "packages"]))
-    system_apps = set(_run_adb_command(serial, ["shell", "pm", "list", "packages", "-s"]))
-    user_apps = set(_run_adb_command(serial, ["shell", "pm", "list", "packages", "-3"]))
+    all_apps = set(list_packages(serial))
+    system_apps = set(list_packages(serial, ["-s"]))
+    user_apps = set(list_packages(serial, ["-3"]))
 
-    categorized = {
+    categorized: Dict[str, List[str]] = {
         "manufacturer": [],
         "android": [],
         "google": [],
         "facebook": [],
+        "tiktok": [],
+        "twitter": [],
+        "instagram": [],
+        "parler": [],
+        "reddit": [],
         "vendor": [],
         "user": [],
         "system": [],
@@ -77,6 +65,36 @@ def categorize_installed_apps(serial: str, manufacturer: str) -> Dict[str, List[
     for pkg in sorted(all_apps - assigned):
         if _matches_any(pkg, app_category_keywords.FACEBOOK_PACKAGES):
             categorized["facebook"].append(pkg)
+            assigned.add(pkg)
+
+    # TikTok apps
+    for pkg in sorted(all_apps - assigned):
+        if _matches_any(pkg, app_category_keywords.TIKTOK_PACKAGES):
+            categorized["tiktok"].append(pkg)
+            assigned.add(pkg)
+
+    # Twitter apps
+    for pkg in sorted(all_apps - assigned):
+        if _matches_any(pkg, app_category_keywords.TWITTER_PACKAGES):
+            categorized["twitter"].append(pkg)
+            assigned.add(pkg)
+
+    # Instagram apps
+    for pkg in sorted(all_apps - assigned):
+        if _matches_any(pkg, app_category_keywords.INSTAGRAM_PACKAGES):
+            categorized["instagram"].append(pkg)
+            assigned.add(pkg)
+
+    # Parler apps
+    for pkg in sorted(all_apps - assigned):
+        if _matches_any(pkg, app_category_keywords.PARLER_PACKAGES):
+            categorized["parler"].append(pkg)
+            assigned.add(pkg)
+
+    # Reddit apps
+    for pkg in sorted(all_apps - assigned):
+        if _matches_any(pkg, app_category_keywords.REDDIT_PACKAGES):
+            categorized["reddit"].append(pkg)
             assigned.add(pkg)
 
     # Vendor-related apps
@@ -113,7 +131,21 @@ def _print_app_summary(apps_by_category: Dict[str, List[str]]) -> None:
     print("============================================================")
     print("                APP CATEGORY SUMMARY")
     print("============================================================")
-    for label in ["manufacturer", "android", "google", "facebook", "vendor", "user", "system", "uncategorized"]:
+    for label in [
+        "manufacturer",
+        "android",
+        "google",
+        "facebook",
+        "tiktok",
+        "twitter",
+        "instagram",
+        "parler",
+        "reddit",
+        "vendor",
+        "user",
+        "system",
+        "uncategorized",
+    ]:
         apps = apps_by_category.get(label, [])
         if apps:
             print(f" [{label.capitalize():<13}] {len(apps)} apps")

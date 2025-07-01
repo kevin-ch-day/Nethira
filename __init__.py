@@ -1,1 +1,0 @@
-"Nethira core package."
