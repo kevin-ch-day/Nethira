@@ -1,8 +1,8 @@
 # filename: analysis/device_enumeration.py
 
-from analysis import device_info_fetcher
-from models.device_info import DeviceInfo
-from utils import display_utils
+from nethira.analysis.device import device_info_fetcher
+from nethira.models.device_info import DeviceInfo
+from nethira.utils import display_utils
 from typing import List, Optional
 
 

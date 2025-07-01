@@ -2,7 +2,7 @@
 
 import os
 from typing import List
-from models.device_info import DeviceInfo
+from nethira.models.device_info import DeviceInfo
 
 def clear_screen():
     """
