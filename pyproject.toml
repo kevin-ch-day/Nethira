@@ -3,5 +3,5 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "nethira"
+name = "Nethira"
 version = "0.1.0"
