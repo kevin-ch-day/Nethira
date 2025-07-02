@@ -24,10 +24,10 @@ def display_enumerated_devices(devices: List[DeviceInfo]) -> None:
         devices (List[DeviceInfo]): Devices to display.
     """
     if not devices:
-        print("[*] No devices connected.\n")
+        display_utils.print_warning("No devices connected.")
         return
 
-    print("\nConnected Devices:")
+    display_utils.print_title("Connected Devices")
     display_utils.print_device_table(devices)
 
 

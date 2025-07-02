@@ -1,5 +1,5 @@
-"Analysis modules for Nethira."
+"""Aggregate analysis modules for Nethira."""
 
-from . import apps, device, manifests
+from . import apps, device, manifest
 
-__all__ = ["apps", "device", "manifests"]
+__all__ = ["apps", "device", "manifest"]

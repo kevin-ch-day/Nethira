@@ -30,7 +30,7 @@ def prompt_device_selection(devices: list[DeviceInfo]) -> DeviceInfo | None:
     Returns None if selection is invalid or cancelled.
     """
     if not devices:
-        print("[!] No devices available for selection.\n")
+        display_utils.print_warning("No devices available for selection.")
         return None
 
     print("\nSelect a device:")
@@ -39,14 +39,14 @@ def prompt_device_selection(devices: list[DeviceInfo]) -> DeviceInfo | None:
 
     choice = input("\nEnter device number: ").strip()
     if not choice.isdigit():
-        print("[!] Please enter a valid number.\n")
+        display_utils.print_warning("Please enter a valid number.")
         return None
 
     index = int(choice)
     if 1 <= index <= len(devices):
         return devices[index - 1]
     else:
-        print("[!] Invalid selection.\n")
+        display_utils.print_error("Invalid selection.")
         return None
 
 
@@ -113,7 +113,7 @@ def handle_device_report(devices: list[DeviceInfo]) -> None:
 def _prompt_package_selection(packages: list[str]) -> list[str]:
     """Prompt user to choose packages by index."""
     if not packages:
-        print("[!] No packages found.\n")
+        display_utils.print_warning("No packages found.")
         return []
 
     for idx, pkg in enumerate(packages, 1):
@@ -143,14 +143,14 @@ def handle_manifest_analysis(devices: list[DeviceInfo]) -> None:
 
     pkgs = sorted(list_packages(selected_device.serial))
     if not pkgs:
-        print("[!] No packages retrieved from device.\n")
+        display_utils.print_warning("No packages retrieved from device.")
         return
     print(f"[DEBUG] Retrieved {len(pkgs)} package(s) from device")
 
     print("\nSelect packages to analyze:")
     selected = _prompt_package_selection(pkgs)
     if not selected:
-        print("[!] No valid packages selected.\n")
+        display_utils.print_warning("No valid packages selected.")
         return
     print(f"[DEBUG] Packages chosen for analysis: {selected}")
 
@@ -197,12 +197,12 @@ def main():
             break
 
         else:
-            print("[!] Invalid input. Please enter a valid option.\n")
+            display_utils.print_warning("Invalid input. Please enter a valid option.")
 
 
 if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        print("\n\n[!] Interrupted by user. Exiting...\n")
+        display_utils.print_error("Interrupted by user. Exiting...")
         sys.exit(0)
