@@ -9,6 +9,8 @@
 - Categorises installed apps using predefined keyword lists
 - Detects presence of major social media apps (Facebook, Twitter, Instagram, Parler, TikTok)
 - Generates JSON reports containing device info and categorized apps
+- Performs static analysis of APK files to inspect manifest metadata and requested permissions
+- Saves analysis results as timestamped JSON files in the `logs/` directory
 - Works on Windows, macOS and Linux (uses the bundled ADB if available)
 
 ## Project Layout
@@ -32,6 +34,19 @@ python main.py
 ```
 
 Windows users may double-click `run_app.bat` instead.
+
+### Static APK Analysis
+
+Static analysis requires the optional [`androguard`](https://pypi.org/project/androguard/) package to parse APK
+files. Once installed you can analyze an APK by providing the path when launching the
+tool:
+
+```bash
+python main.py /path/to/app.apk
+```
+
+Analysis results will be written as JSON files inside `logs/` with a timestamped
+name such as `apk_<package>_20240101_120000.log`.
 
 ## License
 
