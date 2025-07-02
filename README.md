@@ -48,6 +48,20 @@ python main.py /path/to/app.apk
 Analysis results will be written as JSON files inside `logs/` with a timestamped
 name such as `apk_<package>_20240101_120000.log`.
 
+Some features also rely on the [`apkutils2`](https://pypi.org/project/apkutils2/) library.
+If it is not installed the manifest analysis modules will be disabled but the
+rest of the toolkit will still operate.
+
+### Display Utilities
+
+Nethira includes helper functions for consistent terminal output.
+See `tools/display_messages.py` for a demonstration of formatted
+info, warning and error messages as well as titles and key/value blocks.
+Colors are automatically enabled when the output is a TTY but can be
+forced on or off using the `FORCE_COLOR` and `NO_COLOR` environment
+variables. Utility functions are provided to check or change this
+behaviour at runtime.
+
 ## License
 
 This project is released under the MIT License. See the [LICENSE](LICENSE) file for details.
