@@ -9,6 +9,7 @@
 - Categorises installed apps using predefined keyword lists
 - Detects presence of major social media apps (Facebook, Twitter, Instagram, Parler, TikTok)
 - Generates JSON reports containing device info and categorized apps
+- Performs static manifest analysis of installed APKs
 - Works on Windows, macOS and Linux (uses the bundled ADB if available)
 
 ## Project Layout
